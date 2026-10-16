@@ -1,0 +1,65 @@
+:root {
+    --bg: #0c0a1d;
+    --surface: #161335;
+    --surface-2: #1f1b45;
+    --line: #2f2b5c;
+    --ink: #ece9ff;
+    --muted: #a09bd0;
+    --accent: #4ff0d0;
+    --accent-2: #8b6cff;
+    --gold: #ffd166;
+    --on-accent: #07131a;
+    --radius: 10px;
+
+    --font-pixel: "Press Start 2P", "Courier New", monospace;
+    --font-head: "Chakra Petch", system-ui, sans-serif;
+    --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    
+    color-scheme: dark;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    color: var(--ink);
+    font-family: var(--font-body);
+    line-height: 1.7;
+    background-color: var(--bg);
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+     background-size: 44px 44px;
+}
+
+h1,
+h2,
+h3 {
+    margin: 0;
+    font-family: var(--font-head);
+    line-height: 1.15;
+}
+
+p {
+    margin: 0 0 1em;
+}
+
+em {
+    font-style: normal;
+    color: var(--accent);
+}
+
+.container {
+    width: min(1060px, 100% - 2.5rem);
+    margin-inline: auto;
+}
+
+.tag {
+    font-family: var(--font-pixel);
+    font-size: 0.68rem;
+    line-height: 1.6;
+    color: var(--accent);
+    text-transform: uppercase;
+}
