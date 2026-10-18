@@ -65,6 +65,10 @@ em {
     margin-inline: auto;
 }
 
+section {
+    padding: 6rem 0;
+}
+
 .tag {
     font-family: var(--font-pixel);
     font-size: 0.68rem;
@@ -155,8 +159,90 @@ header {
     cursor: pointer;
 }
 
+/* Hero */
+.hero {
+    padding-top: 4.5rem;
+}
+
+.hero h1 {
+    margin-bottom: 1.2rem;
+    font-size: clamp(2.3rem, 5.5vw, 4rem);
+}
+
+.lead {
+    max-width: 34rem;
+    font-size: 1.15rem;
+    color: var(--muted);
+}
+
+.typing {
+    padding-right: 4px;
+    color: var(--ink);
+    border-right: 3px solid var(--accent);
+    animation: blink 0.8s steps(1) infinite;
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+        opacity: 0.3;
+    }
+}
+
+/* Buttons */
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    margin-top: 2rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: 1rem 1.3rem;
+    font-family: var(--font-pixel);
+    font-size: 0.68rem;
+    line-height: 1.4;
+    text-decoration: none;
+    text-transform: uppercase;
+    border: 3px solid var(--ink);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.12s, box-shadow 0.12s, background 0.2s;
+}
+
+.btn-primary {
+    color: var(--on-accent);
+    background: var(--accent);
+    box-shadow: 5px 5px 0 var(--accent-2);
+}
+
+.btn-ghost {
+    color: var(--ink);
+    background: transparent;
+    box-shadow: 5px 5px 0 var(--line);
+}
+
+.btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0 var(--accent-2);
+}
+
+.btn-ghost:hover {
+    background: var(--surface-2);
+}
+
+.btn:active {
+    transform: translate(4px, 4px);
+    box-shadow: 1px 1px 0 var(--accent-2);
+}
+
 /* Mobile */
 @media (max-width: 800px) {
+    section {
+        padding: 4.2rem 0;
+    }
+
     .menu-btn {
         display: inline-block;
     }
