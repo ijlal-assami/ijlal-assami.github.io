@@ -10,14 +10,34 @@
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
+        <!-- Header -->
+        <header>
+            <nav class="container nav" aria-label="Main navigation">
+                <a href="#home" class="logo">I<span>.</span>A</a>
+
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+
+                <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
+            </nav>
+        </header>
+
         <main>
+            <!-- Home -->
             <section id="home">
                 <div class="container">
-                <p>Player 1 ready!</p>
-                <h1>Hi, I'm Ijlal. I build things for the <em>web</em>.</h1>
-                <p>Aspiring web developer from Indonesian.</p>
-            </div>
+                    <p class="tag">Player 1 ready!</p>
+                    <h1>Hi, I'm Ijlal. I build things for the <em>web</em>.</h1>
+                    <p>Aspiring web developer from Indonesia.</p>
+                </div>
             </section>
         </main>
+
+        <script src="js/main.js" defer></script>
     </body>
 </html>
