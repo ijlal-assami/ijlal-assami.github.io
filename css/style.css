@@ -47,6 +47,11 @@ h3 {
     line-height: 1.15;
 }
 
+h2 {
+    margin-bottom: 1.5rem;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+}
+
 p {
     margin: 0 0 1em;
 }
@@ -350,13 +355,101 @@ header {
     box-shadow: 1px 1px 0 var(--accent-2);
 }
 
+/* About */
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+.stats {
+    display: grid;
+    gap: 0.8rem;
+}
+
+/* Card look shared by stats and badges */
+.stat,
+.badge {
+    background: var(--surface);
+    border: 2px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.35);
+}
+
+.stat {
+    padding: 1rem 1.2rem;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.stat:hover {
+    transform: translateX(6px);
+    border-color: var(--accent);
+}
+
+.stat b {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-family: var(--font-pixel);
+    font-size: 0.6rem;
+    font-weight: 400;
+    color: var(--accent);
+    text-transform: uppercase;
+}
+
+.stat span {
+    color: var(--ink);
+}
+
+.sub {
+    margin: 3rem 0 1rem;
+    font-size: 1.4rem;
+}
+
+.badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.7rem 1.1rem;
+    font-weight: 700;
+    opacity: 0.5;
+    filter: grayscale(0.7);
+    transition: transform 0.2s;
+}
+
+.badge span {
+    font-size: 1.1rem;
+}
+
+/* Unlocked achievements */
+.badge.on {
+    opacity: 1;
+    filter: none;
+    border-color: var(--gold);
+}
+
+.badge.on span {
+    color: var(--gold);
+}
+
+.badge:hover {
+    transform: translateY(-4px) rotate(-1deg);
+}
+
 /* Mobile */
 @media (max-width: 800px) {
     section {
         padding: 4.2rem 0;
     }
 
-    .hero-grid {
+    .hero-grid,
+    .about-grid {
         grid-template-columns: 1fr;
     }
 
