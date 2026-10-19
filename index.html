@@ -30,18 +30,44 @@
         <main>
             <!-- Home -->
             <section id="home" class="hero">
-                <div class="container">
-                    <p class="tag">Player 1 ready!</p>
-                    <h1>Hi, I'm Ijlal. I build things for the <em>web</em>.</h1>
+                <div class="container hero-grid">
+                    <div>
+                        <p class="tag">Player 1 ready!</p>
+                        <h1>Hi, I'm Ijlal. I build things for the <em>web</em>.</h1>
 
-                    <p class="lead">
-                        Aspiring web developer from Indonesia, currently <span class="typing" id="typing"></span>
-                    </p>
+                        <p class="lead">
+                            Aspiring web developer from Indonesia, currently <span class="typing" id="typing"></span>
+                        </p>
 
-                    <div class="actions">
-                        <a href="#about" class="btn btn-primary">▶ Start</a>
-                        <a href="#projects" class="btn btn-ghost">See my projects</a>
-                        <a href="#contact" class="btn btn-ghost">Send message</a>
+                        <div class="actions">
+                            <a href="#about" class="btn btn-primary">▶ Start</a>
+                            <a href="#projects" class="btn btn-ghost">See my projects</a>
+                            <a href="#contact" class="btn btn-ghost">Send message</a>
+                        </div>
+                    </div>
+
+                    <!-- Player card -->
+                    <div class="player-card">
+                        <div class="photo-frame">
+                            <svg id="photoPlaceholder" viewBox="0 0 200 250" role="img" aria-label="Photo placeholder">
+                                <rect width="200" height="250" fill="var(--surface-2)"/>
+                                <circle cx="100" cy="95" r="38" fill="var(--accent)" opacity="0.85"/>
+                                <path d="M25 250c4-60 38-85 75-85s71 25 75 85z" fill="var(--accent-2)" opacity="0.9"/>
+                            </svg>
+                            <img id="photoImg" alt="Portrait of Ijlal Assami" hidden>
+                        </div>
+
+                        <div class="player-info">
+                            <p class="player-name">IJLAL ASSAMI</p>
+                            <p class="player-class">Class: Web Developer</p>
+
+                            <div class="meter">
+                                <span>Learning XP</span>
+                                <div class="meter-track">
+                                    <i data-fill="60"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

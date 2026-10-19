@@ -61,4 +61,27 @@
     } else {
         tick();
     }
+
+    /* Photo: loads images/me.jpg, falls back to the placeholder if the file is missing */
+    const photo = $('#photoImg');
+    const placeholder = $('#photoPlaceholder');
+
+    photo.addEventListener('load', () => {
+        photo.hidden = false;
+        placeholder.style.display = 'none';
+    });
+
+    photo.addEventListener('error', () => {
+        photo.hidden = true;
+        placeholder.style.display = '';
+    });
+
+    photo.src = 'images/me.jpg';
+
+    /* XP bar: set the width from the data-fill attribute */
+    setTimeout(() => {
+        $$('[data-fill]').forEach(bar => {
+            bar.style.width = bar.dataset.fill + '%';
+        });
+    }, 300);
 })();

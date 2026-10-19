@@ -189,6 +189,119 @@ header {
     }
 }
 
+/* Hero Layout: text on the left, player card on the right */
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+/* Player card */
+.player-card {
+    position: relative;
+    justify-self: center;
+    width: min(300px, 82%);
+    padding: 1rem;
+    background: var(--surface);
+    border: 2px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s, border-color 0.3s;
+}
+
+.player-card:hover {
+    transform: translateY(-6px) rotate(-1deg);
+    border-color: var(--accent);
+}
+
+/* The two HUD corner brackets */
+.player-card::before,
+.player-card::after {
+    content: "";
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border: 3px solid var(--accent);
+    pointer-events: none;
+}
+
+.player-card::before {
+    top: -8px;
+    left: -8px;
+    border-right: 0;
+    border-bottom: 0;
+}
+
+.player-card::after {
+    right: -8px;
+    bottom: -8px;
+    border-left: 0;
+    border-top: 0;
+}
+
+.photo-frame {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--surface-2);
+    border: 2px solid var(--line);
+    border-radius: 6px;
+}
+
+.photo-frame img,
+.photo-frame svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* "display: block" above would override the hidden attribute, so hide it again here */
+.photo-frame img[hidden] {
+    display: none;
+}
+
+.player-info {
+    padding: 1rem 0.3rem 0.2rem;
+}
+
+.player-name {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-pixel);
+    font-size: 0.72rem;
+}
+
+.player-class {
+    margin-bottom: 0.8rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+/* XP bar */
+.meter span {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-family: var(--font-pixel);
+    font-size: 0.55rem;
+    color: var(--gold);
+}
+
+.meter-track {
+    height: 12px;
+    overflow: hidden;
+    background: var(--bg);
+    border: 2px solid var(--line);
+    border-radius: 3px;
+}
+
+.meter-track i {
+    display: block;
+    width: 0;
+    height: 100%;
+    background: repeating-linear-gradient(90deg, var(--gold) 0 8px, transparent 8px 11px);
+    transition: width 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
 /* Buttons */
 .actions {
     display: flex;
@@ -241,6 +354,15 @@ header {
 @media (max-width: 800px) {
     section {
         padding: 4.2rem 0;
+    }
+
+    .hero-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .player-card {
+        order: -1;
+        width: min(250px, 75%);
     }
 
     .menu-btn {
