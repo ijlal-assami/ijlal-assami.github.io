@@ -368,9 +368,10 @@ header {
     gap: 0.8rem;
 }
 
-/* Card look shared by stats and badges */
+/* Card look shared by stats, badges, and skills */
 .stat,
-.badge {
+.badge,
+.skill {
     background: var(--surface);
     border: 2px solid var(--line);
     border-radius: var(--radius);
@@ -440,6 +441,91 @@ header {
 
 .badge:hover {
     transform: translateY(-4px) rotate(-1deg);
+}
+
+/* Skills */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.4rem;
+}
+
+.skill {
+    padding: 1.4rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.skill:hover {
+    transform: translateY(-6px);
+    border-color: var(--accent);
+    box-shadow: 6px 6px 0 var(--accent-2);
+}
+
+.skill-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.7rem;
+}
+
+.skill h3 {
+    font-size: 1.5rem;
+}
+
+.lv {
+    font-family: var(--font-pixel);
+    font-size: 0.6rem;
+    color: var(--gold);
+}
+
+.skill p {
+    min-height: 4.4em;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+
+/* Skills bar: 10 small segments, filled by JavaScript */
+.segs {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+}
+
+.segs span {
+    height: 12px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    transition: background 0.25s, box-shadow 0.25s;
+}
+
+.segs span.on {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+.inventory {
+    margin-top: 2rem;
+    color: var(--muted);
+}
+
+.chip {
+    display: inline-block;
+    margin: 0.25rem 0.4rem 0.25rem 0;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.9rem;
+    color: var(--ink);
+    border: 2px solid var(--line);
+    border-radius: 4px;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.chip:hover {
+    color: var(--on-accent);
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: translateY(-3px);
 }
 
 /* Mobile */

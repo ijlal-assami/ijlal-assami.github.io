@@ -84,4 +84,32 @@
             bar.style.width = bar.dataset.fill + '%';
         });
     }, 300);
+
+    /* Skill bars: each bar is 10 small segments, built here to keep the HTML short */
+    $$('.segs').forEach(bar => {
+        for (let i = 0; i < 10; i++) {
+            bar.append(document.createElement('span'));
+        }
+    });
+
+    // Light up the segments one by one, up to the level in data-level
+    const fillSegments = bar => {
+        $$('span', bar).forEach((segment, i) => {
+            if (i < Number(bar.dataset.level)) {
+                setTimeout(() => segment.classList.add('on'), i * 110);
+            }
+        });
+    };
+
+    // Fill a skill bar only when its card scrolls into view
+    const skillObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+
+            fillSegments($('.segs', entry.target));
+            skillObserver.unobserve(entry.target);   // only once
+        });
+    }, { threshold: 0.3 });
+
+    $$('.skill').forEach(card => skillObserver.observe(card));
 })();
