@@ -2,6 +2,24 @@
     const $ = (s, el = document) => el.querySelector(s);
     const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 
+    /* Toast notifications: small popups in the bottom-right corner */
+    const toastBox = $('#toasts');
+
+    const toast = (title, text) => {
+        const box = document.createElement('div');
+        box.className = 'toast';
+        box.innerHTML = '<b></b><span></span>';
+        $('b', box).textContent = title;
+        $('span', box).textContent = text;
+        toastBox.append(box);
+
+        // After 3.2 seconds: play the slide-out animation, then remove the element
+        setTimeout(() => {
+            box.classList.add('out');
+            setTimeout(() => box.remove(), 400);
+        }, 3200);
+    };
+
     /* Mobile menu */
     const menuBtn = $('#menuBtn');
     const navLinks = $('#navLinks');
@@ -142,9 +160,11 @@
             formStatus.textContent = 'Message sent successfully! Thanks for reaching out.';
             formStatus.dataset.status = 'success';
             contactForm.reset();
+            toast('Message sent', 'Your message has been sent successfully!');
         } catch (error) {
             formStatus.textContent = 'Sorry, your message could not be sent. Please try again.';
             formStatus.dataset.status = 'error';
+            toast('Send failed', 'Please check your connection and try again.');
         } finally {
             sendBtn.disabled = false;
             sendBtn.textContent = originalText;
