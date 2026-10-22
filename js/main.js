@@ -112,4 +112,42 @@
     }, { threshold: 0.3 });
 
     $$('.skill').forEach(card => skillObserver.observe(card));
+
+    /* Contact form: send to Formspree without leaving the page */
+    const contactForm = $('#contactForm');
+    const sendBtn = $('#sendBtn');
+    const formStatus = $('#formStatus');
+
+    contactForm.addEventListener('submit', async e => {
+        e.preventDefault();    // stop the browser from leaving the page
+
+        const originalText = sendBtn.textContent;
+
+        sendBtn.disabled = true;
+        sendBtn.textContent = 'Sending...';
+        formStatus.textContent = 'Sending your message...';
+        formStatus.dataset.status = 'sending';
+
+        try {
+            const response = await fetch(contactForm.action, {
+                method: 'POST',
+                body: new FormData(contactForm),
+                headers: { Accept: 'application/json' }
+            });
+
+            if (!response.ok) {
+                throw new Error('Message delivery failed.');
+            }
+
+            formStatus.textContent = 'Message sent successfully! Thanks for reaching out.';
+            formStatus.dataset.status = 'success';
+            contactForm.reset();
+        } catch (error) {
+            formStatus.textContent = 'Sorry, your message could not be sent. Please try again.';
+            formStatus.dataset.status = 'error';
+        } finally {
+            sendBtn.disabled = false;
+            sendBtn.textContent = originalText;
+        }
+    });
 })();

@@ -368,11 +368,12 @@ header {
     gap: 0.8rem;
 }
 
-/* Card look shared by stats, badges, and skills */
+/* Card look shared by stats, badges, skills, projects, and the contact box */
 .stat,
 .badge,
 .skill,
-.project {
+.project,
+.contact-box {
     background: var(--surface);
     border: 2px solid var(--line);
     border-radius: var(--radius);
@@ -601,6 +602,108 @@ header {
     box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.35);
 }
 
+/* Contact */
+.contact-box {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 2.5rem;
+    padding: clamp(1.5rem, 5vw, 3rem);
+}
+
+.links {
+    display: grid;
+    gap: 0.6rem;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s, padding 0.2s;
+}
+
+.links a:hover {
+    padding-left: 6px;
+    color: var(--accent);
+}
+
+/* GitHub icon */
+.gh {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+/* Form */
+form {
+    display: grid;
+    gap: 1rem;
+}
+
+label {
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+input,
+textarea {
+    padding: 0.75rem 1rem;
+    font: inherit;
+    color: var(--ink);
+    background: var(--bg);
+    border: 2px solid var(--line);
+    border-radius: 6px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+form .btn {
+    justify-self: start;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Status message under the form. JavaScript sets data-status. */
+.note {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+#formStatus[data-status="sending"] {
+    color: var(--gold);
+}
+
+#formStatus[data-status="success"] {
+    color: var(--accent);
+}
+
+#formStatus[data-status="error"] {
+    color: #ff6b6b;
+}
+
 /* Mobile */
 @media (max-width: 800px) {
     section {
@@ -608,7 +711,8 @@ header {
     }
 
     .hero-grid,
-    .about-grid {
+    .about-grid,
+    .contact-box {
         grid-template-columns: 1fr;
     }
 
