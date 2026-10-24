@@ -96,13 +96,6 @@
 
     photo.src = 'images/me.jpg';
 
-    /* XP bar: set the width from the data-fill attribute */
-    setTimeout(() => {
-        $$('[data-fill]').forEach(bar => {
-            bar.style.width = bar.dataset.fill + '%';
-        });
-    }, 300);
-
     /* Skill bars: each bar is 10 small segments, built here to keep the HTML short */
     $$('.segs').forEach(bar => {
         for (let i = 0; i < 10; i++) {
@@ -119,17 +112,29 @@
         });
     };
 
-    // Fill a skill bar only when its card scrolls into view
-    const skillObserver = new IntersectionObserver(entries => {
+    /* Scroll reveal: fade elements in when they scroll into view */
+    const revealObserver = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (!entry.isIntersecting) return;
 
-            fillSegments($('.segs', entry.target));
-            skillObserver.unobserve(entry.target);   // only once
-        });
-    }, { threshold: 0.3 });
+            const item = entry.target;
+            item.classList.add('show');
 
-    $$('.skill').forEach(card => skillObserver.observe(card));
+            // A skill card also lights up its bar
+            const skillBar = $('.segs', item);
+            if (skillBar) fillSegments(skillBar);
+
+            // The player card also fills its XP bar
+            const xpBar = $('[data-fill]', item);
+            if (xpBar) xpBar.style.width = xpBar.dataset.fill + '%';
+
+            revealObserver.unobserve(item);   // only once
+        });
+    }, { threshold: 0.15 });
+
+    const startReveal = () => $$('.reveal').forEach(item => revealObserver.observe(item));
+
+    startReveal();
 
     /* Contact form: send to Formspree without leaving the page */
     const contactForm = $('#contactForm');

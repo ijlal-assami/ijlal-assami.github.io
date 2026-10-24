@@ -8,6 +8,15 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=DM+Sans:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/style.css">
+
+        <!-- Without JavaScript the reveal animation never runs, so show everything -->
+        <noscript>
+            <style>
+                .reveal {
+                    opacity: 1;
+                }
+            </style>
+        </noscript>
     </head>
     <body>
         <!-- Header -->
@@ -31,7 +40,7 @@
             <!-- Home -->
             <section id="home" class="hero">
                 <div class="container hero-grid">
-                    <div>
+                    <div class="reveal">
                         <p class="tag">Player 1 ready!</p>
                         <h1>Hi, I'm Ijlal. I build things for the <em>web</em>.</h1>
 
@@ -52,7 +61,7 @@
                     </div>
 
                     <!-- Player card -->
-                    <div class="player-card">
+                    <div class="player-card reveal">
                         <div class="photo-frame">
                             <svg id="photoPlaceholder" viewBox="0 0 200 250" role="img" aria-label="Photo placeholder">
                                 <rect width="200" height="250" fill="var(--surface-2)"/>
@@ -80,11 +89,11 @@
             <!-- About -->
             <section id="about">
                 <div class="container">
-                    <p class="tag">01 · About</p>
-                    <h2>Player Profile</h2>
+                    <p class="tag reveal">01 · About</p>
+                    <h2 class="reveal">Player Profile</h2>
 
                     <div class="about-grid">
-                        <div>
+                        <div class="reveal">
                             <p>
                                 I'm a software and game development student who loves turning ideas into working websites.
                                 I like figuring out <em>why</em> code works, not just copying it, because that's how you
@@ -98,7 +107,7 @@
                             </p>
                         </div>
 
-                        <div class="stats">
+                        <div class="stats reveal">
                             <div class="stat">
                                 <b>Class</b>
                                 <span>Web Developer (in training)</span>
@@ -121,9 +130,9 @@
                         </div>
                     </div>
 
-                    <h3 class="sub">Achievements</h3>
+                    <h3 class="sub reveal">Achievements</h3>
 
-                    <div class="badges">
+                    <div class="badges reveal">
                         <div class="badge on"><span>★</span>Hello, World!</div>
                         <div class="badge on"><span>★</span>Portfolio launched</div>
                         <div class="badge"><span>🔒</span>First dev job</div>
@@ -135,11 +144,11 @@
             <!-- Skills -->
             <section id="skills">
                 <div class="container">
-                    <p class="tag">02 · Skills</p>
-                    <h2>Skill Tree</h2>
+                    <p class="tag reveal">02 · Skills</p>
+                    <h2 class="reveal">Skill Tree</h2>
 
                     <div class="skills-grid">
-                        <article class="skill">
+                        <article class="skill reveal">
                             <div class="skill-top">
                                 <h3>HTML</h3>
                                 <span class="lv">LV. 8</span>
@@ -148,7 +157,7 @@
                             <div class="segs" data-level="8" aria-hidden="true"></div>
                         </article>
 
-                        <article class="skill">
+                        <article class="skill reveal">
                             <div class="skill-top">
                                 <h3>CSS</h3>
                                 <span class="lv">LV. 7</span>
@@ -157,7 +166,7 @@
                             <div class="segs" data-level="7" aria-hidden="true"></div>
                         </article>
 
-                        <article class="skill">
+                        <article class="skill reveal">
                             <div class="skill-top">
                                 <h3>JavaScript</h3>
                                 <span class="lv">LV. 5</span>
@@ -166,7 +175,7 @@
                             <div class="segs" data-level="5" aria-hidden="true"></div>
                         </article>
 
-                        <article class="skill">
+                        <article class="skill reveal">
                             <div class="skill-top">
                                 <h3>PHP</h3>
                                 <span class="lv">LV. 6</span>
@@ -176,7 +185,7 @@
                         </article>
                     </div>
 
-                    <p class="inventory">
+                    <p class="inventory reveal">
                         Inventory:
                         <span class="chip">Git</span>
                         <span class="chip">GitHub</span>
@@ -188,12 +197,12 @@
             <!-- Projects -->
             <section id="projects">
                 <div class="container">
-                    <p class="tag">03 · Projects</p>
-                    <h2>Quest Log</h2>
+                    <p class="tag reveal">03 · Projects</p>
+                    <h2 class="reveal">Quest Log</h2>
 
                     <div class="projects-grid">
                         <!-- To add a new project, copy one <article> block and edit the text -->
-                        <article class="project">
+                        <article class="project reveal">
                             <p class="project-tag">Quest 01 · Completed</p>
                             <h3>Portfolio Website</h3>
                             <p class="project-text">
@@ -212,13 +221,13 @@
                             </div>
                         </article>
 
-                        <article class="project locked">
+                        <article class="project locked reveal">
                             <p class="project-tag">Quest 02 · Locked</p>
                             <h3>🔒 Coming soon</h3>
                             <p class="project-text">The next quest is loading. A new project will appear here soon.</p>
                         </article>
 
-                        <article class="project locked">
+                        <article class="project locked reveal">
                             <p class="project-tag">Quest 03 · Locked</p>
                             <h3>🔒 Coming soon</h3>
                             <p class="project-text">Still grinding XP for this one. Check back later!</p>
@@ -230,7 +239,7 @@
             <!-- Contact -->
             <section id="contact">
                 <div class="container">
-                    <div class="contact-box">
+                    <div class="contact-box reveal">
                         <div>
                             <p class="tag">04 · Contact</p>
                             <h2>Let's team up</h2>

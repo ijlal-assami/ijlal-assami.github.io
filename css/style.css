@@ -782,6 +782,34 @@ footer p {
     }
 }
 
+/* Scroll reveal: elements start hidden, then fade up when they scroll into view */
+.reveal {
+    opacity: 0;
+}
+
+.reveal.show {
+    opacity: 1;
+    animation: reveal-up 0.7s ease backwards;
+}
+
+@keyframes reveal-up {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+}
+
+/* People who turned off motion just see everything right away */
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        opacity: 1;
+    }
+
+    .reveal.show {
+        animation: none;
+    }
+}
+
 /* Mobile */
 @media (max-width: 800px) {
     section {
