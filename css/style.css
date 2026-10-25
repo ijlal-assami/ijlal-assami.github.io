@@ -163,6 +163,32 @@ header::after {
     transform: translateY(-50%) scale(1);
 }
 
+/* Color theme picker (the small squares in the navbar) */
+.palette {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: 0.8rem;
+}
+
+.swatch {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--sw-a) 50%, var(--sw-b) 50%);
+    border: 2px solid var(--line);
+    border-radius: 4px;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.swatch:hover {
+    transform: scale(1.2) rotate(8deg);
+}
+
+.swatch[aria-pressed="true"] {
+    border-color: var(--ink);
+}
+
 .menu-btn {
     display: none;
     width: 42px;
@@ -861,5 +887,9 @@ footer p {
 
     .nav-links a::before {
         left: -0.4rem;
+    }
+
+    .palette {
+        margin: 0.6rem 0 0 0.9rem;
     }
 }

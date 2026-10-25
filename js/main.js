@@ -3,6 +3,22 @@
     const $$ = (s, el = document) => [...el.querySelectorAll(s)];
     const root = document.documentElement;
 
+    /* Safe localStorage helpers: some browsers block storage, so we wrap it in try/catch */
+    const store = {
+        get(key) {
+            try {
+                return localStorage.getItem(key);
+            } catch {
+                return null;
+            }
+        },
+        set(key, value) {
+            try {
+                localStorage.setItem(key, value);
+            } catch {}
+        }
+    };
+
     /* Toast notifications: small popups in the bottom-right corner */
     const toastBox = $('#toasts');
 
@@ -20,6 +36,44 @@
             setTimeout(() => box.remove(), 400);
         }, 3200);
     };
+
+    /* Color theme picker: changes the two accent colors of the whole page */
+    const palettes = [
+        { name: 'Cyber',     a: '#4ff0d0', b: '#8b6cff' },
+        { name: 'Bubblegum', a: '#ff6bcb', b: '#6c8bff' },
+        { name: 'Gold',      a: '#ffd166', b: '#ff7a59' },
+        { name: 'Red',       a: '#ff4655', b: '#6d28d9' }
+    ];
+
+    const paletteBox = $('#palette');
+
+    const applyPalette = index => {
+        root.style.setProperty('--accent', palettes[index].a);
+        root.style.setProperty('--accent-2', palettes[index].b);
+
+        // Mark the chosen square as pressed
+        $$('button', paletteBox).forEach((button, i) => {
+            button.setAttribute('aria-pressed', i === index);
+        });
+
+        store.set('palette', index);
+    };
+
+    // One small square (button) for each palette
+    palettes.forEach((palette, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'swatch';
+        button.style.setProperty('--sw-a', palette.a);
+        button.style.setProperty('--sw-b', palette.b);
+        button.setAttribute('aria-label', 'Color theme: ' + palette.name);
+        button.addEventListener('click', () => applyPalette(index));
+        paletteBox.append(button);
+    });
+
+    // Restore the saved choice, or use the first palette
+    const savedPalette = Number(store.get('palette'));
+    applyPalette(palettes[savedPalette] ? savedPalette : 0);
 
     /* Mobile menu */
     const menuBtn = $('#menuBtn');
