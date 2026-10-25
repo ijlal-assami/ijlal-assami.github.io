@@ -189,8 +189,6 @@
 
     const startReveal = () => $$('.reveal').forEach(item => revealObserver.observe(item));
 
-    startReveal();
-
     /* Scroll progress: the colored line under the navbar grows as you scroll down */
     const header = $('header');
 
@@ -273,4 +271,97 @@
             sendBtn.textContent = originalText;
         }
     });
+
+    /* Game-style loading screen */
+    const loader = $('#loader');
+    const loadBar = $('#loadBar');
+    const runner = $('#runner');
+    const loadPct = $('#loadPct');
+    const loadMsg = $('#loadMsg');
+    const loadTip = $('#loadTip');
+
+    // Build the 20 little squares of the loading bar
+    for (let i = 0; i < 20; i++) {
+        loadBar.append(document.createElement('span'));
+    }
+    const barSegments = $$('span', loadBar);
+
+    // Show one random tip
+    const tips = [
+        'Tip: try the Konami code somewhere on the page.',
+        'Tip: pick your favorite color theme in the navbar.',
+        'Tip: scroll down to fill the XP bar.'
+    ];
+    loadTip.textContent = tips[Math.floor(Math.random() * tips.length)];
+
+    // The message changes as the percentage grows
+    const messages = [
+        { from: 0, text: 'Booting up...' },
+        { from: 25, text: 'Loading HTML...' },
+        { from: 50, text: 'Loading CSS...' },
+        { from: 70, text: 'Loading JavaScript...' },
+        { from: 90, text: 'Loading PHP...' },
+        { from: 100, text: 'Ready!' }
+    ];
+
+    const currentMessage = percent => {
+        // Take the last message whose "from" is not above the percentage
+        return messages.filter(m => percent >= m.from).pop().text;
+    };
+
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const duration = reduceMotion ? 500 : 2800;   // how long loading takes (milliseconds)
+
+    let pageLoaded = document.readyState === 'complete';
+    if (!pageLoaded) {
+        addEventListener('load', () => { pageLoaded = true; });
+    }
+
+    const finishLoading = () => {
+        loader.classList.add('done');       // slide the loading screen up
+        setTimeout(startReveal, 300);       // let the slide start first, so it stays smooth
+        setTimeout(() => {
+            loader.remove();
+            root.classList.remove('loading');   // unlock scrolling
+        }, 900);
+    };
+
+    let startTime = null;
+
+    const frame = now => {
+        if (startTime === null) startTime = now;   // first frame
+
+        let percent = Math.min(100, (now - startTime) / duration * 100);
+        if (!pageLoaded) percent = Math.min(percent, 90);   // never 100% before the page is really loaded
+
+        loadPct.textContent = Math.floor(percent) + '%';
+        runner.style.setProperty('--x', percent / 100);
+        barSegments.forEach((segment, i) => {
+            segment.classList.toggle('on', i < Math.floor(percent / 5));
+        });
+        loadMsg.textContent = currentMessage(percent);
+
+        if (percent < 100) {
+            requestAnimationFrame(frame);
+        } else {
+            setTimeout(finishLoading, 450);
+        }
+    };
+
+    // Show the loading screen only once per browser session
+    let seenLoader = false;
+    try {
+        seenLoader = sessionStorage.getItem('seenLoader') === '1';
+    } catch {}
+
+    if (seenLoader) {
+        loader.remove();
+        root.classList.remove('loading');
+        startReveal();
+    } else {
+        try {
+            sessionStorage.setItem('seenLoader', '1');
+        } catch {}
+        requestAnimationFrame(frame);
+    }
 })();

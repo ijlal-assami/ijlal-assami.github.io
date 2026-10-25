@@ -23,6 +23,7 @@
 }
 
 html {
+    scrollbar-gutter: stable;
     scroll-behavior: smooth;
     scroll-padding-top: 76px;
 }
@@ -845,6 +846,118 @@ footer p {
     .reveal.show {
         animation: none;
     }
+}
+
+/* Loading screen */
+html.loading body {
+    overflow: hidden;
+}
+
+.loader {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 2rem;
+    padding: 1.5rem;
+    text-align: center;
+    background-color: var(--bg);
+    background-image:
+        radial-gradient(600px 400px at 50% 40%, color-mix(in srgb, var(--accent-2) 22%, transparent), transparent),
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: auto, 44px 44px, 44px 44px;
+    will-change: transform;
+    transition: transform 0.7s ease-in-out;
+}
+
+/* When loading is finished, the whole screen slides up and away */
+.loader.done {
+    transform: translateY(-100%);
+}
+
+.loader-top {
+    margin: 0;
+    font-family: var(--font-pixel);
+    font-size: 0.65rem;
+    color: var(--gold);
+    animation: blink 1s steps(1) infinite;
+}
+
+.loader-box {
+    width: min(440px, 88vw);
+}
+
+.loader-title {
+    margin: 0 0 1.2rem;
+    font-family: var(--font-pixel);
+    font-size: clamp(0.75rem, 3.2vw, 1.15rem);
+    line-height: 1.6;
+}
+
+.loader-title span {
+    color: var(--accent);
+}
+
+/* The pixel ghost sits above the bar. --x (0 to 1) is set by JavaScript. */
+.runner {
+    position: relative;
+    padding-top: 44px;
+}
+
+.sprite {
+    position: absolute;
+    top: 0;
+    left: calc((100% - 32px) * var(--x, 0));
+    width: 32px;
+    height: 32px;
+    color: var(--accent);
+    shape-rendering: crispEdges;
+    animation: bob 0.5s steps(2) infinite;
+}
+
+@keyframes bob {
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+.load-bar {
+    display: grid;
+    grid-template-columns: repeat(20, 1fr);
+    gap: 3px;
+    padding: 6px;
+    background: var(--surface);
+    border: 3px solid var(--ink);
+    border-radius: 4px;
+}
+
+.load-bar span {
+    height: 16px;
+    background: var(--bg);
+}
+
+.load-bar span.on {
+    background: var(--accent);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+.load-line {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0 0;
+    font-family: var(--font-pixel);
+    font-size: 0.6rem;
+    color: var(--muted);
+}
+
+.loader-tip {
+    max-width: 30rem;
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--muted);
 }
 
 /* Mobile */
