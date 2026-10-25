@@ -1,6 +1,7 @@
 (() => {
     const $ = (s, el = document) => el.querySelector(s);
     const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+    const root = document.documentElement;
 
     /* Toast notifications: small popups in the bottom-right corner */
     const toastBox = $('#toasts');
@@ -135,6 +136,49 @@
     const startReveal = () => $$('.reveal').forEach(item => revealObserver.observe(item));
 
     startReveal();
+
+    /* Scroll progress: the colored line under the navbar grows as you scroll down */
+    const header = $('header');
+
+    const updateProgress = () => {
+        const maxScroll = root.scrollHeight - root.clientHeight;
+        const percent = maxScroll > 0 ? (root.scrollTop / maxScroll) * 100 : 0;
+        header.style.setProperty('--p', percent + '%');
+    };
+
+    addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+
+    /* Active menu link + one-time achievement toasts */
+    const menuLinks = $$('.nav-links a[href^="#"]');
+    const unlocked = new Set();   // sections that already showed their toast
+
+    const achievements = {
+        skills: ['Achievement unlocked', 'Skill Tree discovered'],
+        projects: ['Quest log opened', 'See what I have built so far'],
+        contact: ['Quest update', 'Say hi to start a new quest']
+    };
+
+    const sectionObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+
+            const id = entry.target.id;
+
+            // Highlight the menu link of the section in the middle of the screen
+            menuLinks.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+            });
+
+            // Show the achievement toast only the first time
+            if (achievements[id] && !unlocked.has(id)) {
+                unlocked.add(id);
+                toast(...achievements[id]);
+            }
+        });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+
+    $$('main section').forEach(section => sectionObserver.observe(section));
 
     /* Contact form: send to Formspree without leaving the page */
     const contactForm = $('#contactForm');

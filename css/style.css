@@ -92,6 +92,17 @@ header {
     border-bottom: 1px solid var(--line);
 }
 
+/* Scroll progress line under the navbar. JavaScript sets --p (0% to 100%). */
+header::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: var(--p, 0%);
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
 .nav {
     display: flex;
     align-items: center;
