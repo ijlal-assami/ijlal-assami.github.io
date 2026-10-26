@@ -767,6 +767,12 @@ footer p {
     margin: 0 0 0.3rem;
 }
 
+.secret {
+    font-family: var(--font-pixel);
+    font-size: 0.5rem;
+    opacity: 0.6;
+}
+
 /* Toast notifications */
 .toasts {
     position: fixed;
@@ -958,6 +964,23 @@ html.loading body {
     margin: 0;
     font-size: 0.9rem;
     color: var(--muted);
+}
+
+/* Easter egg: the whole page cycles through colors for a few seconds */
+html.party {
+    animation: hue 1s linear infinite;
+}
+
+@keyframes hue {
+    to {
+        filter: hue-rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html.party {
+        animation: none;
+    }
 }
 
 /* Mobile */

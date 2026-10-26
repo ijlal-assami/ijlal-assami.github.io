@@ -272,6 +272,34 @@
         }
     });
 
+    /* Easter egg: the Konami code (up up down down left right left right B A) */
+    const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let konamiStep = 0;   // how many keys of the code were typed correctly so far
+
+    addEventListener('keydown', e => {
+        // Ignore keys like Shift, so typing a capital B does not break the code
+        if (['Shift', 'Control', 'Alt', 'Meta', 'CapsLock'].includes(e.key)) return;
+
+        // Letters are compared in lowercase, so "B" and "b" both work
+        const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+
+        if (key === konamiCode[konamiStep]) {
+            konamiStep++;       // correct key: wait for the next one
+        } else if (key === konamiCode[0]) {
+            konamiStep = 1;     // wrong key, but it is the first key of the code: start again from there
+        } else {
+            konamiStep = 0;     // wrong key: start over
+        }
+
+        // The whole code was typed
+        if (konamiStep === konamiCode.length) {
+            konamiStep = 0;
+            toast('Cheat code activated', '+30 lives. You found the secret!');
+            root.classList.add('party');
+            setTimeout(() => root.classList.remove('party'), 4000);
+        }
+    });
+
     /* Game-style loading screen */
     const loader = $('#loader');
     const loadBar = $('#loadBar');
