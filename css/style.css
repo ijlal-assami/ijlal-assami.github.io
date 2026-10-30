@@ -995,9 +995,28 @@ html.party {
         grid-template-columns: 1fr;
     }
 
+    .hero {
+        padding-top: 2.5rem;
+    }
+
     .player-card {
         order: -1;
-        width: min(250px, 75%);
+        width: min(230px, 72%);
+    }
+
+    .skill p {
+        min-height: 0;
+    }
+
+    /* Bigger touch targets for fingers */
+    .swatch {
+        width: 30px;
+        height: 30px;
+    }
+
+    .links a,
+    .project-links a {
+        padding: 0.35rem 0;
     }
 
     .menu-btn {
