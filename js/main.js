@@ -237,40 +237,43 @@
     const sendBtn = $('#sendBtn');
     const formStatus = $('#formStatus');
 
-    contactForm.addEventListener('submit', async e => {
-        e.preventDefault();    // stop the browser from leaving the page
+    // Only set up the form if all three elements exist, so a missing one can not crash the rest of the script
+    if (contactForm && sendBtn && formStatus) {
+        contactForm.addEventListener('submit', async e => {
+            e.preventDefault();    // stop the browser from leaving the page
 
-        const originalText = sendBtn.textContent;
+            const originalText = sendBtn.textContent;
 
-        sendBtn.disabled = true;
-        sendBtn.textContent = 'Sending...';
-        formStatus.textContent = 'Sending your message...';
-        formStatus.dataset.status = 'sending';
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Sending...';
+            formStatus.textContent = 'Sending your message...';
+            formStatus.dataset.status = 'sending';
 
-        try {
-            const response = await fetch(contactForm.action, {
-                method: 'POST',
-                body: new FormData(contactForm),
-                headers: { Accept: 'application/json' }
-            });
+            try {
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: new FormData(contactForm),
+                    headers: { Accept: 'application/json' }
+                });
 
-            if (!response.ok) {
-                throw new Error('Message delivery failed.');
+                if (!response.ok) {
+                    throw new Error('Message delivery failed.');
+                }
+
+                formStatus.textContent = 'Message sent successfully! Thanks for reaching out.';
+                formStatus.dataset.status = 'success';
+                contactForm.reset();
+                toast('Message sent', 'Your message has been sent successfully!');
+            } catch (error) {
+                formStatus.textContent = 'Sorry, your message could not be sent. Please try again.';
+                formStatus.dataset.status = 'error';
+                toast('Send failed', 'Please check your connection and try again.');
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = originalText;
             }
-
-            formStatus.textContent = 'Message sent successfully! Thanks for reaching out.';
-            formStatus.dataset.status = 'success';
-            contactForm.reset();
-            toast('Message sent', 'Your message has been sent successfully!');
-        } catch (error) {
-            formStatus.textContent = 'Sorry, your message could not be sent. Please try again.';
-            formStatus.dataset.status = 'error';
-            toast('Send failed', 'Please check your connection and try again.');
-        } finally {
-            sendBtn.disabled = false;
-            sendBtn.textContent = originalText;
-        }
-    });
+        });
+    }
 
     /* Easter egg: the Konami code (up up down down left right left right B A) */
     const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
