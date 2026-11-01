@@ -35,9 +35,11 @@ body {
     line-height: 1.7;
     background-color: var(--bg);
     background-image:
+        radial-gradient(600px 400px at 85% 5%, color-mix(in srgb, var(--accent-2) 22%, transparent), transparent),
+        radial-gradient(500px 400px at 5% 40%, color-mix(in srgb, var(--accent) 12%, transparent), transparent),
         linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-    background-size: 44px 44px;
+    background-size: auto, auto, 44px 44px, 44px 44px;
 }
 
 h1,
@@ -119,6 +121,7 @@ header::after {
 
 .logo span {
     color: var(--accent);
+    animation: blink 1s steps(1) infinite;
 }
 
 .nav-links {
