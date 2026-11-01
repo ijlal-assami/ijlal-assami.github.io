@@ -16,16 +16,25 @@
     --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
 
     color-scheme: dark;
+
+    /* Keep content away from phone notches and rounded corners (works with viewport-fit=cover in the HTML) */
+    padding:
+        env(safe-area-inset-top, 0px)
+        env(safe-area-inset-right, 0px)
+        env(safe-area-inset-bottom, 0px)
+        env(safe-area-inset-left, 0px);
 }
 
-* {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
 html {
     scrollbar-gutter: stable;
     scroll-behavior: smooth;
-    scroll-padding-top: 76px;
+    scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 76px);
 }
 
 body {
@@ -63,6 +72,12 @@ a {
     color: inherit;
 }
 
+/* Visible ring for people who move around with the keyboard (Tab key) */
+:focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: 3px;
+}
+
 em {
     font-style: normal;
     color: var(--accent);
@@ -78,6 +93,7 @@ section {
 }
 
 .tag {
+    margin-bottom: 1rem;
     font-family: var(--font-pixel);
     font-size: 0.68rem;
     line-height: 1.6;
@@ -86,9 +102,19 @@ section {
 }
 
 /* Header */
+/* Solid strip under the phone status bar, so scrolling content does not show through there */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 10;
+    height: env(safe-area-inset-top, 0px);
+    background: var(--bg);
+}
+
 header {
     position: sticky;
-    top: 0;
+    top: env(safe-area-inset-top, 0px);
     z-index: 20;
     background: color-mix(in srgb, var(--bg) 88%, transparent);
     backdrop-filter: blur(10px);
@@ -734,8 +760,9 @@ form .btn {
 }
 
 .btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+    opacity: 0.65;
+    cursor: wait;
+    transform: none;
 }
 
 /* Status message under the form. JavaScript sets data-status. */
@@ -779,8 +806,8 @@ footer p {
 /* Toast notifications */
 .toasts {
     position: fixed;
-    right: 1rem;
-    bottom: 1rem;
+    right: calc(env(safe-area-inset-right, 0px) + 1rem);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
     z-index: 30;
     display: grid;
     gap: 0.6rem;
