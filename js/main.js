@@ -3,6 +3,9 @@
     const $$ = (s, el = document) => [...el.querySelectorAll(s)];
     const root = document.documentElement;
 
+    // People can turn on "reduce motion" in their device settings. We respect it.
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     /* Safe localStorage helpers: some browsers block storage, so we wrap it in try/catch */
     const store = {
         get(key) {
@@ -46,10 +49,12 @@
     ];
 
     const paletteBox = $('#palette');
+    let themeColors = [palettes[0].a, palettes[0].b];   // the animated background uses these
 
     const applyPalette = index => {
         root.style.setProperty('--accent', palettes[index].a);
         root.style.setProperty('--accent-2', palettes[index].b);
+        themeColors = [palettes[index].a, palettes[index].b];
 
         // Mark the chosen square as pressed
         $$('button', paletteBox).forEach((button, i) => {
@@ -93,6 +98,18 @@
         a.addEventListener('click', () => setMenu(false));
     });
 
+    /* Smooth scrolling (Lenis): the page glides and slows down softly instead of jumping */
+    let lenis = null;
+
+    // If the library did not load (for example offline), the page just scrolls the normal way
+    if (typeof Lenis !== 'undefined') {
+        lenis = new Lenis({
+            autoRaf: true,    // Lenis updates itself on every animation frame
+            lerp: 0.09,       // lower = smoother, and it takes longer to stop
+            anchors: true     // menu links and buttons like href="#about" glide to their section too
+        });
+    }
+
     /* Typing effect */
     const phrases = [
         'learning PHP.',
@@ -129,7 +146,7 @@
     };
 
     // Skip the animation for people who turned off motion in their device settings
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (reduceMotion) {
         typing.textContent = phrases[0];
     } else {
         tick();
@@ -303,6 +320,147 @@
         }
     });
 
+    /* Animated background: tiny pixel stars drift upward and link up like a skill tree */
+    const bgCanvas = $('#bgCanvas');
+    const bgCtx = bgCanvas.getContext('2d');
+    const stars = [];
+    const mouse = { x: -1000, y: -1000 };   // far away until the mouse moves
+    const LINK_DISTANCE = 130;              // stars closer than this get a line between them
+    let bgWidth = 0;
+    let bgHeight = 0;
+    let comet = null;                       // the shooting star that crosses the screen now and then
+    let nextComet = 4000;                   // time (milliseconds) when the next comet may appear
+
+    const randomBetween = (min, max) => min + Math.random() * (max - min);
+    const wrap = (value, max) => ((value % max) + max) % max;   // keeps a number between 0 and max
+
+    const newStar = () => ({
+        x: Math.random() * bgWidth,
+        y: Math.random() * bgHeight,
+        size: Math.random() < 0.7 ? 2 : 3,        // pixel size
+        depth: randomBetween(0.2, 1),             // far stars (small number) move less when you scroll
+        vx: randomBetween(-0.12, 0.12),
+        vy: randomBetween(-0.25, -0.05),          // drifts slowly upward
+        color: Math.random() < 0.5 ? 0 : 1,       // 0 = main accent color, 1 = second accent color
+        phase: Math.random() * Math.PI * 2        // so the stars do not all twinkle together
+    });
+
+    const resizeBackground = () => {
+        const ratio = Math.min(window.devicePixelRatio || 1, 2);   // sharp on phones, but not too heavy
+        bgWidth = window.innerWidth;
+        bgHeight = window.innerHeight;
+        bgCanvas.width = bgWidth * ratio;
+        bgCanvas.height = bgHeight * ratio;
+        bgCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+        // Fewer stars on small screens, so phones stay fast
+        const count = Math.min(80, Math.round(bgWidth * bgHeight / 12000));
+        while (stars.length < count) stars.push(newStar());
+        stars.length = count;
+    };
+
+    const drawBackground = time => {
+        bgCtx.clearRect(0, 0, bgWidth, bgHeight);
+        const scrolled = window.scrollY;
+
+        // 1. Move every star and work out where to draw it (scrolling shifts near stars more)
+        stars.forEach(star => {
+            if (!reduceMotion) {
+                star.x = wrap(star.x + star.vx, bgWidth);
+                star.y = wrap(star.y + star.vy, bgHeight);
+            }
+            star.drawX = Math.round(star.x);
+            star.drawY = Math.round(wrap(star.y - scrolled * star.depth * 0.3, bgHeight));
+        });
+
+        // 2. Draw a line between two stars that are close to each other
+        bgCtx.lineWidth = 1;
+        for (let i = 0; i < stars.length; i++) {
+            for (let j = i + 1; j < stars.length; j++) {
+                const a = stars[i];
+                const b = stars[j];
+                const distance = Math.hypot(a.drawX - b.drawX, a.drawY - b.drawY);
+                if (distance > LINK_DISTANCE) continue;
+
+                bgCtx.globalAlpha = (1 - distance / LINK_DISTANCE) * 0.32;   // closer = clearer
+                bgCtx.strokeStyle = themeColors[a.color];
+                bgCtx.beginPath();
+                bgCtx.moveTo(a.drawX + 1, a.drawY + 1);
+                bgCtx.lineTo(b.drawX + 1, b.drawY + 1);
+                bgCtx.stroke();
+            }
+        }
+
+        // 3. Draw a line from the mouse to the stars around it
+        stars.forEach(star => {
+            const distance = Math.hypot(star.drawX - mouse.x, star.drawY - mouse.y);
+            if (distance > 150) return;
+
+            bgCtx.globalAlpha = (1 - distance / 150) * 0.6;
+            bgCtx.strokeStyle = themeColors[0];
+            bgCtx.beginPath();
+            bgCtx.moveTo(star.drawX + 1, star.drawY + 1);
+            bgCtx.lineTo(mouse.x, mouse.y);
+            bgCtx.stroke();
+        });
+
+        // 4. Draw the stars (small squares that twinkle)
+        stars.forEach(star => {
+            bgCtx.globalAlpha = reduceMotion ? 0.7 : 0.55 + 0.35 * Math.sin(time * 0.002 + star.phase);
+            bgCtx.fillStyle = themeColors[star.color];
+            bgCtx.fillRect(star.drawX, star.drawY, star.size, star.size);
+        });
+
+        // 5. A comet now and then: a short trail of fading gold pixels
+        if (!reduceMotion) {
+            if (!comet && time > nextComet) {
+                comet = { x: randomBetween(0, bgWidth * 0.7), y: -20, vx: randomBetween(5, 7), vy: randomBetween(2.5, 3.5) };
+            }
+
+            if (comet) {
+                comet.x += comet.vx;
+                comet.y += comet.vy;
+
+                for (let i = 0; i < 12; i++) {
+                    bgCtx.globalAlpha = (1 - i / 12) * 0.8;
+                    bgCtx.fillStyle = '#ffd166';   // the same gold as the XP bar
+                    bgCtx.fillRect(Math.round(comet.x - comet.vx * i * 1.5), Math.round(comet.y - comet.vy * i * 1.5), 3, 3);
+                }
+
+                if (comet.x > bgWidth + 40 || comet.y > bgHeight + 40) {
+                    comet = null;
+                    nextComet = time + randomBetween(7000, 14000);
+                }
+            }
+        }
+
+        bgCtx.globalAlpha = 1;
+
+        // Keep animating (people with "reduce motion" only get one still picture)
+        if (!reduceMotion) requestAnimationFrame(drawBackground);
+    };
+
+    // The mouse position (only on devices that have a real mouse)
+    if (matchMedia('(hover: hover)').matches) {
+        addEventListener('mousemove', e => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        document.addEventListener('mouseleave', () => {
+            mouse.x = -1000;
+            mouse.y = -1000;
+        });
+    }
+
+    addEventListener('resize', () => {
+        resizeBackground();
+        if (reduceMotion) requestAnimationFrame(drawBackground);   // redraw the still picture
+    });
+
+    resizeBackground();
+    requestAnimationFrame(drawBackground);
+
     /* Game-style loading screen */
     const loader = $('#loader');
     const loadBar = $('#loadBar');
@@ -340,7 +498,6 @@
         return messages.filter(m => percent >= m.from).pop().text;
     };
 
-    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const duration = reduceMotion ? 500 : 2800;   // how long loading takes (milliseconds)
 
     let pageLoaded = document.readyState === 'complete';
@@ -354,6 +511,7 @@
         setTimeout(() => {
             loader.remove();
             root.classList.remove('loading');   // unlock scrolling
+            if (lenis) lenis.start();
         }, 900);
     };
 
@@ -393,6 +551,7 @@
         try {
             sessionStorage.setItem('seenLoader', '1');
         } catch {}
+        if (lenis) lenis.stop();   // no scrolling while the loading screen is showing
         requestAnimationFrame(frame);
     }
 })();

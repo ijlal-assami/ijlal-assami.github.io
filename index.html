@@ -80,6 +80,9 @@
             <p class="loader-tip" id="loadTip"></p>
         </div>
 
+        <!-- Animated background (drawn by JavaScript) -->
+        <canvas class="bg-canvas" id="bgCanvas" aria-hidden="true"></canvas>
+
         <!-- Header -->
         <header>
             <nav class="container nav" aria-label="Main navigation">
@@ -342,7 +345,7 @@
 
                             <label for="message">
                                 Message
-                                <textarea id="message" name="message" maxlength="5000" required></textarea>
+                                <textarea id="message" name="message" maxlength="5000" data-lenis-prevent required></textarea>
                             </label>
 
                             <button class="btn btn-primary" id="sendBtn" type="submit">Send ▶</button>
@@ -367,6 +370,7 @@
         <!-- Toast notifications appear here -->
         <div class="toasts" id="toasts" aria-live="polite"></div>
 
+        <script src="js/lenis.min.js" defer></script>
         <script src="js/main.js" defer></script>
     </body>
 </html>

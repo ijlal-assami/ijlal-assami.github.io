@@ -37,6 +37,24 @@ html {
     scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 76px);
 }
 
+/* Needed by the smooth-scroll library (Lenis) */
+html.lenis,
+html.lenis body {
+    height: auto;
+}
+
+html.lenis {
+    scroll-behavior: auto;
+}
+
+.lenis.lenis-stopped {
+    overflow: clip;
+}
+
+.lenis [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
 body {
     margin: 0;
     color: var(--ink);
@@ -719,6 +737,15 @@ header::after {
     fill: currentColor;
 }
 
+/* For outline-style icons (Instagram, WhatsApp) */
+.gh-line {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
 /* Form */
 form {
     display: grid;
@@ -884,6 +911,16 @@ footer p {
     }
 }
 
+/* Animated background: drawn by JavaScript on a canvas that sits behind everything */
+.bg-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
 /* Loading screen */
 html.loading body {
     overflow: hidden;
@@ -1013,25 +1050,10 @@ html.party {
     }
 }
 
-/* Mobile */
+/* Tablet and phone: the menu becomes a button */
 @media (max-width: 800px) {
     section {
         padding: 4.2rem 0;
-    }
-
-    .hero-grid,
-    .about-grid,
-    .contact-box {
-        grid-template-columns: 1fr;
-    }
-
-    .hero {
-        padding-top: 2.5rem;
-    }
-
-    .player-card {
-        order: -1;
-        width: min(230px, 72%);
     }
 
     .skill p {
@@ -1076,5 +1098,23 @@ html.party {
 
     .palette {
         margin: 0.6rem 0 0 0.9rem;
+    }
+}
+
+/* Phone: every two-column layout becomes one column */
+@media (max-width: 700px) {
+    .hero-grid,
+    .about-grid,
+    .contact-box {
+        grid-template-columns: 1fr;
+    }
+
+    .hero {
+        padding-top: 2.5rem;
+    }
+
+    /* The photo card comes after the text, so the first screen shows who I am and what I do */
+    .player-card {
+        width: min(260px, 78%);
     }
 }
